@@ -2,21 +2,13 @@ package main
 
 import "fmt"
 
-func superAdd(numbers ...int) int {
-	total := 0
-	for _, number := range numbers { // range는 for하고만 쓰이는 문법
-		// fmt.Println(index, number)
-		total += number
-	}
-
-	// for i := 0; i < len(numbers); i++ {
-	// 	fmt.Println(numbers[i])
-	// }
-
-	return total
+func canIDrink(age int) bool {
+	if koreanAge := age + 2; koreanAge < 18 { // variable expression , if 문에서만 쓰이는 if scope 변수를 선언함으로서 가독성 향상
+		return false
+	} // else{}
+	return true
 }
 
 func main() {
-	total := superAdd(1, 2, 3, 4, 5)
-	fmt.Println(total)
+	fmt.Println(canIDrink(16))
 }
