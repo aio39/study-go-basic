@@ -1,12 +1,12 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/aio39/study_go_basic/something"
-)
+import "fmt"
 
 func main() {
-	fmt.Println("hello world!!") // Go에서는 대문자 함수를 Export 해줌
-	something.SayHello()
+	const name string = "aio39"
+	change := "a" // 타입 추론, 한번 정한 type은 변경 불가능. func 안에서만 가능  ==> var change string = "39"
+	change = "b"
+	// name = "aio40"
+	fmt.Println(name)
+	fmt.Println(change)
 }
