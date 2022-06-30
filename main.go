@@ -2,25 +2,19 @@ package main
 
 import "fmt"
 
-func canIDrink(age int) bool {
-	switch koreanAge := age + 2; koreanAge {
-	case 10:
-		return false
-	case 18:
-		return true
-	}
-	// switch {
-	// case age < 18:
-	// 	return false
-	// case age == 18:
-	// 	return true
-	// case age > 50:
-	// 	return false
-	// }
-
-	return false
-}
-
 func main() {
-	fmt.Println(canIDrink(16))
+	// a := 2
+	// b := a
+	// a = 10
+	// fmt.Println(a, b) // 10 , 2
+
+	// a := 2
+	// b := &a
+	// fmt.Println(&a, b, *b) // 0xc0000140a0 0xc0000140a8  , 0x -> 16진법
+
+	a := 2
+	b := &a
+	*b = 20
+	fmt.Println(a, b, *b) // 20, 주소 , 20
+
 }
