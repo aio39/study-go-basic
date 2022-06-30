@@ -3,18 +3,13 @@ package main
 import "fmt"
 
 func main() {
-	// a := 2
-	// b := a
-	// a = 10
-	// fmt.Println(a, b) // 10 , 2
+	names := [5]string{"aio", "miku", "rin"} // Array
+	names[3] = "3"
+	names[4] = "4"
 
-	// a := 2
-	// b := &a
-	// fmt.Println(&a, b, *b) // 0xc0000140a0 0xc0000140a8  , 0x -> 16진법
+	infinite := []string{} // Slice
+	infinite = append(infinite, "aio")
 
-	a := 2
-	b := &a
-	*b = 20
-	fmt.Println(a, b, *b) // 20, 주소 , 20
+	fmt.Println(names, infinite)
 
 }
