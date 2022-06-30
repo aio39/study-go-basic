@@ -3,10 +3,22 @@ package main
 import "fmt"
 
 func canIDrink(age int) bool {
-	if koreanAge := age + 2; koreanAge < 18 { // variable expression , if 문에서만 쓰이는 if scope 변수를 선언함으로서 가독성 향상
+	switch koreanAge := age + 2; koreanAge {
+	case 10:
 		return false
-	} // else{}
-	return true
+	case 18:
+		return true
+	}
+	// switch {
+	// case age < 18:
+	// 	return false
+	// case age == 18:
+	// 	return true
+	// case age > 50:
+	// 	return false
+	// }
+
+	return false
 }
 
 func main() {
