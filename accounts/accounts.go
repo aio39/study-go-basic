@@ -1,5 +1,7 @@
 package accounts
 
+import "errors"
+
 // Account Struct
 type Account struct { // export Upper -> public
 	// Owner   string // public Upper
@@ -24,7 +26,14 @@ func (a Account) Balance() int {
 	return a.balance
 }
 
+// err 클린코드 패턴, err0000 네이밍 컨벤션
+var errNoMoney = errors.New("Can't withdraw you are poor")
+
 // Withdraw x amount from your account
-func (a *Account) Withdraw(amount int) {
+func (a *Account) Withdraw(amount int) error {
+	if a.balance < amount {
+		return errNoMoney
+	}
 	a.balance -= amount
+	return nil // null none
 }

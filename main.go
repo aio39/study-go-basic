@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/aio39/study_go_basic/accounts"
 )
@@ -12,4 +13,10 @@ func main() {
 	account.Deposit(100)
 	fmt.Println(account)
 	fmt.Println(account.Balance())
+	err := account.Withdraw(200)
+	if err != nil { // go에서는 에러 Exception을 캐치해주지 않아도 프로그램이 종료되지 않음.
+		// err catch 보다는 귀찮지만, err 체크를 강제하므로 안정적임
+		log.Fatalln(err)
+	}
+
 }
