@@ -8,12 +8,16 @@ import (
 
 func main() {
 	dictionary := mydict.Dictionary{}
-	word := "hello"
-	definition := "こんにちは"
-	err := dictionary.Add(word, definition)
+	baseWord := "hello"
+	dictionary.Add(baseWord, "First")
+	// dictionary.Delete(baseWord)
+
+	err := dictionary.Update(baseWord, "Second")
 	if err != nil {
 		fmt.Println(err)
 	}
-	hello, err := dictionary.Search(word)
-	fmt.Println(hello)
+
+	word, _ := dictionary.Search(baseWord)
+	fmt.Println(word)
+
 }
