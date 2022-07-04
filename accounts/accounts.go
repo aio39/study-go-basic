@@ -1,6 +1,9 @@
 package accounts
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Account Struct
 type Account struct { // export Upper -> public
@@ -36,4 +39,19 @@ func (a *Account) Withdraw(amount int) error {
 	}
 	a.balance -= amount
 	return nil // null none
+}
+
+// ChangeOwner of the account
+func (a *Account) ChangeOwner(newOwner string) {
+	a.owner = newOwner
+
+}
+
+// Owner of the account
+func (a Account) Owner() string {
+	return a.owner
+}
+
+func (a Account) String() string { // String() 메서드를 통해서 객체 출력을 제어할 수 있음.
+	return fmt.Sprint(a.Owner(), "'s account.\n", "Balance: ", a.Balance())
 }
