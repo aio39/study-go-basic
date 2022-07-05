@@ -51,17 +51,13 @@ import (
 
 func main() {
 	c := make(chan string)
-	people := [2]string{"aio", "miku"}
+	people := [4]string{"aio", "miku", "rin", "ichika"}
 	for _, person := range people {
 		go isCute(person, c)
 	}
-	fmt.Println("Waiting ..")
-	resultOne := <-c
-	resultTwo := <-c
-	// resultThree := <-c // error
-	fmt.Println("Received this message:", resultOne)
-	fmt.Println("Received this message:", resultTwo) // go루틴에서 메세지를 받을 때 까지 블록킹됨. blocking operation
-	// fmt.Println(<-c) // go는 현재 몇개의 go루틴이 돌아가고 있는지 알 수 있다.
+	for i := 0; i < len(people); i++ {
+		fmt.Println(<-c)
+	}
 
 }
 
