@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -31,7 +33,9 @@ func main() {
 		jobs = append(jobs, extractedJobs...)
 	}
 
-	fmt.Println("Total jobs:", len(jobs))
+	// fmt.Println("Total jobs:", len(jobs))
+	writeJobs(jobs)
+	fmt.Println("Finish!")
 }
 
 func getPage(page int) []extractedJob {
@@ -56,6 +60,27 @@ func getPage(page int) []extractedJob {
 	})
 
 	return jobs
+
+}
+
+func writeJobs(jobs []extractedJob) {
+	file, err := os.Create("jobs.csv")
+	checkErr(err)
+
+	w := csv.NewWriter(file)
+
+	defer w.Flush() // 아래 작업이 끝나고 파일에 입력
+
+	headers := []string{"ID", "Title", "Location"}
+
+	wErr := w.Write(headers)
+	checkErr(wErr)
+
+	for _, job := range jobs {
+		jobSlice := []string{job.id, job.title, job.location}
+		jErr := w.Write(jobSlice)
+		checkErr(jErr)
+	}
 
 }
 
