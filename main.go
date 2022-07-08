@@ -25,11 +25,17 @@ type extractedJob struct {
 func main() {
 	var jobs []extractedJob
 
+	c := make(chan []extractedJob)
+
 	totalPages := getPages()
 	fmt.Println("get", totalPages, "pages")
 
 	for i := 0; i < totalPages; i++ {
-		extractedJobs := getPage(i)
+		go getPage(i, c)
+	}
+
+	for i := 0; i < totalPages; i++ {
+		extractedJobs := <-c
 		jobs = append(jobs, extractedJobs...)
 	}
 
@@ -38,8 +44,9 @@ func main() {
 	fmt.Println("Finish!")
 }
 
-func getPage(page int) []extractedJob {
+func getPage(page int, mainC chan<- []extractedJob) {
 	pageUrl := baseURL + "&start=" + strconv.Itoa(page*50)
+	c := make(chan extractedJob)
 	fmt.Println("Requesting", pageUrl)
 	res, err := http.Get(pageUrl)
 	checkErr(err)
@@ -55,11 +62,15 @@ func getPage(page int) []extractedJob {
 	var jobs []extractedJob
 
 	searchCards.Each(func(i int, card *goquery.Selection) {
-		job := extractJob(card)
-		jobs = append(jobs, job)
+		go extractJob(card, c)
 	})
 
-	return jobs
+	for i := 0; i < searchCards.Length(); i++ {
+		job := <-c
+		jobs = append(jobs, job)
+	}
+
+	mainC <- jobs
 
 }
 
@@ -76,6 +87,8 @@ func writeJobs(jobs []extractedJob) {
 	wErr := w.Write(headers)
 	checkErr(wErr)
 
+	// csv. Write 는 goroutine-safe 하지 않음. 코드를 잘 못 짜면 runtime panic이 일어남.
+	// concurrency를 지원하는 라이브러리 사용  or Write All로 Batch 처리
 	for _, job := range jobs {
 		jobSlice := []string{job.id, job.title, job.location}
 		jErr := w.Write(jobSlice)
@@ -84,11 +97,11 @@ func writeJobs(jobs []extractedJob) {
 
 }
 
-func extractJob(card *goquery.Selection) extractedJob {
+func extractJob(card *goquery.Selection, c chan<- extractedJob) {
 	id, _ := card.Find("a").Attr("data-jk")
 	title := cleanString(card.Find("a>span").Text())
 	location := cleanString(card.Find(".companyLocation").Text())
-	return extractedJob{id: id, title: title, location: location}
+	c <- extractedJob{id: id, title: title, location: location}
 }
 
 func getPages() int {
